@@ -294,7 +294,7 @@ def create_app() -> gr.Blocks:
                     start_btn = gr.Button("▶️ 开始面试", variant="primary")
                     progress_display = gr.Textbox(label="进度", interactive=False, scale=2)
 
-                chatbot = gr.Chatbot(label="面试对话", height=450, type="messages")
+                chatbot = gr.Chatbot(label="面试对话", height=450)
 
                 with gr.Row():
                     user_input = gr.Textbox(

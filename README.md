@@ -1,3 +1,17 @@
+---
+title: AgentCoach
+emoji: 🎯
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+app_file: app.py
+pinned: false
+license: mit
+short_description: 面向AI工程实习的模拟面试与能力评估系统
+---
+
+
+
 # 🎯 AgentCoach
 
 **面向 AI 工程实习的模拟面试与能力评估系统**

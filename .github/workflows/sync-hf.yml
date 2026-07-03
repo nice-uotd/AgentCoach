@@ -1,0 +1,21 @@
+name: Sync to HuggingFace Space
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync-to-hf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to HuggingFace Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add hf https://nice-uotd:$HF_TOKEN@huggingface.co/spaces/nice-uotd/AgentCoach || true
+          git push hf main --force

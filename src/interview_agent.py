@@ -1,4 +1,4 @@
-"""面试 Agent —— ReAct 策略驱动的面试官"""
+"""面试 Agent —— 状态机驱动 + LLM 决策的多轮追问面试官"""
 import json
 from dataclasses import dataclass, field
 from src.config import MAX_QUESTIONS, MAX_FOLLOWUPS

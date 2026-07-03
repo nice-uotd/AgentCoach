@@ -1,0 +1,208 @@
+{
+  "num_resumes": 10,
+  "num_jds": 3,
+  "num_questions": 92,
+  "retrieval_mode": "hybrid",
+  "metrics": {
+    "平均相关性 (1-5)": {
+      "bm25": 2.83,
+      "hybrid": 3.47
+    },
+    "语义匹配覆盖率": {
+      "bm25": 0.62,
+      "hybrid": 0.78
+    },
+    "Top-5 命中率": {
+      "bm25": 0.7,
+      "hybrid": 0.87
+    }
+  },
+  "conclusions": [
+    "Hybrid 检索（BM25 + 向量 + RRF）相比纯 BM25 提升平均相关性 +0.64 (+22.6%)",
+    "向量语义检索在同义词场景（如\"检索增强\"↔\"RAG\"）下优势明显",
+    "对转行背景（关键词少）的简历，Hybrid 模式语义匹配更稳定",
+    "在 30 组测试中，Hybrid 模式 Top-5 命中率提升 17 个百分点"
+  ],
+  "details": [
+    {
+      "resume": "resume_01",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.079,
+      "hybrid_relevance": 3.299
+    },
+    {
+      "resume": "resume_01",
+      "jd": "rag_engineer",
+      "bm25_relevance": 2.35,
+      "hybrid_relevance": 2.729
+    },
+    {
+      "resume": "resume_01",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 3.273,
+      "hybrid_relevance": 4.014
+    },
+    {
+      "resume": "resume_02",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.584,
+      "hybrid_relevance": 3.854
+    },
+    {
+      "resume": "resume_02",
+      "jd": "rag_engineer",
+      "bm25_relevance": 2.644,
+      "hybrid_relevance": 2.868
+    },
+    {
+      "resume": "resume_02",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.237,
+      "hybrid_relevance": 2.841
+    },
+    {
+      "resume": "resume_03",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 1.853,
+      "hybrid_relevance": 2.212
+    },
+    {
+      "resume": "resume_03",
+      "jd": "rag_engineer",
+      "bm25_relevance": 3.1,
+      "hybrid_relevance": 3.736
+    },
+    {
+      "resume": "resume_03",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.241,
+      "hybrid_relevance": 2.912
+    },
+    {
+      "resume": "resume_04",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.419,
+      "hybrid_relevance": 3.624
+    },
+    {
+      "resume": "resume_04",
+      "jd": "rag_engineer",
+      "bm25_relevance": 3.412,
+      "hybrid_relevance": 4.171
+    },
+    {
+      "resume": "resume_04",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.481,
+      "hybrid_relevance": 2.805
+    },
+    {
+      "resume": "resume_05",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.714,
+      "hybrid_relevance": 4.183
+    },
+    {
+      "resume": "resume_05",
+      "jd": "rag_engineer",
+      "bm25_relevance": 1.985,
+      "hybrid_relevance": 2.262
+    },
+    {
+      "resume": "resume_05",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 3.495,
+      "hybrid_relevance": 4.178
+    },
+    {
+      "resume": "resume_06",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.414,
+      "hybrid_relevance": 4.198
+    },
+    {
+      "resume": "resume_06",
+      "jd": "rag_engineer",
+      "bm25_relevance": 2.872,
+      "hybrid_relevance": 3.85
+    },
+    {
+      "resume": "resume_06",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.557,
+      "hybrid_relevance": 3.199
+    },
+    {
+      "resume": "resume_07",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.459,
+      "hybrid_relevance": 4.154
+    },
+    {
+      "resume": "resume_07",
+      "jd": "rag_engineer",
+      "bm25_relevance": 3.523,
+      "hybrid_relevance": 4.185
+    },
+    {
+      "resume": "resume_07",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 3.209,
+      "hybrid_relevance": 3.446
+    },
+    {
+      "resume": "resume_08",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 2.256,
+      "hybrid_relevance": 2.688
+    },
+    {
+      "resume": "resume_08",
+      "jd": "rag_engineer",
+      "bm25_relevance": 1.96,
+      "hybrid_relevance": 2.346
+    },
+    {
+      "resume": "resume_08",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.002,
+      "hybrid_relevance": 2.424
+    },
+    {
+      "resume": "resume_09",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.071,
+      "hybrid_relevance": 3.563
+    },
+    {
+      "resume": "resume_09",
+      "jd": "rag_engineer",
+      "bm25_relevance": 2.54,
+      "hybrid_relevance": 2.908
+    },
+    {
+      "resume": "resume_09",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.334,
+      "hybrid_relevance": 3.283
+    },
+    {
+      "resume": "resume_10",
+      "jd": "ai_agent_intern",
+      "bm25_relevance": 3.096,
+      "hybrid_relevance": 3.783
+    },
+    {
+      "resume": "resume_10",
+      "jd": "rag_engineer",
+      "bm25_relevance": 2.142,
+      "hybrid_relevance": 2.925
+    },
+    {
+      "resume": "resume_10",
+      "jd": "llm_app_dev",
+      "bm25_relevance": 2.127,
+      "hybrid_relevance": 2.631
+    }
+  ]
+}

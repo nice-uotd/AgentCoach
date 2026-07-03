@@ -16,7 +16,7 @@ short_description: 面向AI工程实习的模拟面试与能力评估系统
 
 **面向 AI 工程实习的模拟面试与能力评估系统**
 
-基于 Hybrid 检索（BM25 + 向量语义 + RRF 融合）进行个性化选题，通过 ReAct 面试 Agent 驱动多轮追问，生成 6 维能力画像雷达图。
+基于 Hybrid 检索（BM25 + 向量语义 + RRF 融合）进行个性化选题，通过 LLM 决策驱动的多轮追问 Agent 模拟面试，生成 6 维能力画像雷达图。
 
 ## 核心特性
 
@@ -25,7 +25,7 @@ short_description: 面向AI工程实习的模拟面试与能力评估系统
 | 📚 92 道结构化题库 | 7 大类别，含参考答案 + 评估标准 + 追问 |
 | 🎯 JD + 简历双匹配 | 根据目标岗位 + 个人背景个性化选题 |
 | 🔍 Hybrid 检索 | BM25 关键词 + 向量语义 + RRF 融合排序 |
-| 🤖 ReAct 面试官 | 对照参考答案智能追问，最多 3 轮深挖 |
+| 🤖 LLM 决策面试官 | 对照参考答案智能追问，最多 3 轮深挖 |
 | 📊 6 维能力画像 | 技术深度/工程经验/表达/STAR/系统设计/专项能力 |
 | 🧪 评测实验 | 10 简历 × 3 岗位，BM25 vs Hybrid 对比 |
 
@@ -79,8 +79,8 @@ docker run -p 7860:7860 agentcoach
     │ Top-5 题目
     ▼
 ┌──────────────────────────┐
-│  ReAct 面试 Agent         │
-│  (追问/评分/换题决策)      │
+│  状态机驱动的面试 Agent    │
+│  (LLM决策: 追问/评分/换题) │
 └──────────────────────────┘
     │ 面试记录
     ▼
@@ -108,8 +108,8 @@ python -m eval.run_eval
 
 ## 项目定位
 
-与 [PaperFlow](../paperflow) 形成技术作品集：
-- **PaperFlow**: 科研文献 RAG + Agent 工具调度
+与 [PaperFlow](https://github.com/nice-uotd/PaperFlow) 形成技术作品集：
+- **[PaperFlow](https://huggingface.co/spaces/nice-uotd/PaperFlow)**: 科研文献 RAG + Agent 工具调度
 - **AgentCoach**: AI 工程岗位模拟面试 + 能力评估
 
 两个项目共享 Hybrid Retrieval 技术路线，展示 RAG/Agent 工程能力和 AI 产品化能力。

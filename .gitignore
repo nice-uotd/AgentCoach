@@ -8,5 +8,4 @@ build/
 venv/
 *.pyc
 .DS_Store
-eval/eval_results.json
 *.png

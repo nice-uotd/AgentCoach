@@ -1,0 +1,18 @@
+姓名：张瑞琪
+学校：北京大学 软件工程 硕士在读
+
+【项目经历】
+1. RAG 驱动的智能客服 Agent（2025.04 - 2025.10）
+- 构建企业级 RAG 系统：Elasticsearch + FAISS 双路召回，文档规模 100 万+
+- 在 RAG 基础上封装 ReAct Agent，支持查询知识库、调用订单 API、发起工单等多工具
+- 实现意图识别 → 检索 → 生成 → 执行全链路，端到端响应时间 < 2s
+- 设计 Fallback 策略：RAG 置信度低时自动切换至人工客服，误转率降低 40%
+
+2. 代码审查 Agent + 文档 RAG（2025.11 - 2026.03）
+- Agent 侧：基于 AST 解析 + LLM 实现自动代码审查，支持 Python/Java/Go
+- RAG 侧：构建团队内部规范文档库，Agent 审查时实时检索编码规范作为 context
+- 实现 Function Calling 集成 GitLab API，自动创建 review comment
+- 上线后代码审查覆盖率从 60% 提升至 95%，人工审查时间减少 50%
+
+【技术栈】
+Python / LangChain / LangGraph / FAISS / Elasticsearch / GitLab API / FastAPI / Kubernetes

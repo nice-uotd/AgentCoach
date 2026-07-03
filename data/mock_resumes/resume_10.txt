@@ -1,0 +1,14 @@
+实习经历：
+1. 字节跳动 AI 平台部 - AI 工程实习生（6个月）
+   - 负责智能客服 Agent 系统核心模块开发，日均处理 5000+ 对话
+   - 设计并实现多路检索管道：Milvus 向量检索 + ES BM25 + RRF 融合，Precision@5 从 72% 提升至 89%
+   - 实现 ReAct Agent 编排器，支持 15+ 工具调用，工具选择准确率 95%
+   - 引入模型路由策略，60% 简单查询走轻量模型，月 API 成本降低 55%
+   - 建立自动化评估体系：500+ 标注集 + RAGAS 指标 + CI 集成
+
+2. 个人项目：PaperFlow - 科研文献 RAG 助手
+   - Hybrid 检索（BM25 + BGE-M3 向量 + RRF）+ LLM-judge 重排序
+   - 部署于 HuggingFace Spaces，支持多轮对话和引用溯源
+
+技术栈：Python、FastAPI、LangChain、Milvus、Redis、Docker、K8s、Prometheus
+熟悉：Agent 架构（ReAct/Plan-and-Execute）、MCP 协议、Function Calling、LoRA 微调

@@ -1,0 +1,18 @@
+姓名：陈思远
+学校：浙江大学 计算机科学与技术 硕士在读
+
+【项目经历】
+1. 企业知识库 RAG 问答系统（2025.03 - 2025.09）
+- 基于 LangChain 构建检索增强生成系统，支持 PDF/Word/网页等多源文档解析
+- 使用 Milvus 向量数据库存储 50 万+ 文档 chunk，embedding 模型采用 bge-large-zh
+- 实现混合检索策略：BM25 稀疏检索 + 向量稠密检索，融合权重通过 grid search 调优
+- 接入 BGE-Reranker 重排序模块，Top-5 召回准确率从 72% 提升至 89%
+- 设计 chunk 分割策略（滑动窗口 + 语义分割），减少上下文断裂问题
+
+2. 多轮对话 RAG 优化（2025.10 - 2026.01）
+- 引入 query rewriting 模块，解决多轮对话中指代消解问题
+- 实现 HyDE（Hypothetical Document Embedding）提升长尾 query 召回率 15%
+- 部署 FastAPI 后端 + Redis 缓存热点查询，QPS 从 20 提升至 150
+
+【技术栈】
+Python / LangChain / Milvus / Elasticsearch / FastAPI / Redis / HuggingFace Transformers

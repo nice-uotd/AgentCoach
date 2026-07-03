@@ -1,0 +1,13 @@
+项目经历：
+1. 课程项目：基于 Flask 的在线书店系统
+   - 使用 Flask + MySQL 实现用户注册、商品浏览、购物车功能
+   - 部署在阿里云 ECS，使用 Nginx 反向代理
+   - 学习了 RESTful API 设计和前后端分离
+
+2. 课程大作业：文本情感分析
+   - 使用 BERT 模型对电商评论进行情感分类
+   - 准确率 89%，使用 HuggingFace Transformers 库
+   - 了解了 Tokenizer、Fine-tuning 基本流程
+
+技术栈：Python、Flask、MySQL、Git、Linux 基础、了解 Docker
+正在学习：LangChain、RAG 基础概念、Prompt Engineering

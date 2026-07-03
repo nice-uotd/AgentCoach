@@ -1,0 +1,22 @@
+姓名：刘浩然
+学校：华中科技大学 软件工程 本科毕业（2024）
+
+【工作经历】
+后端开发工程师 @ 某互联网公司（2024.07 - 2026.03）
+- 负责电商订单微服务开发，基于 FastAPI + PostgreSQL，日均处理 50 万订单
+- 设计消息队列异步架构（RabbitMQ），接口 P99 延迟从 800ms 降至 200ms
+- 搭建 CI/CD 流水线（GitLab CI + Docker + K8s），部署频率从周级提升至日级
+
+【AI 转型项目】
+1. 商品智能问答 POC（2026.02 - 2026.05，个人项目）
+- 学习 LangChain 搭建简单 RAG 系统，接入 OpenAI API 实现商品问答
+- 使用 ChromaDB 存储商品描述 embedding，实现基础语义搜索
+- 尚在学习 Agent 和 Prompt Engineering 相关技术
+
+【自学情况】
+- 完成吴恩达 DeepLearning.AI 系列课程（LangChain/RAG/Agent）
+- 阅读《大语言模型》《动手学深度学习》
+
+【技术栈】
+Python / FastAPI / PostgreSQL / Docker / Kubernetes / RabbitMQ / Git
+AI 相关：LangChain（入门）/ ChromaDB / OpenAI API

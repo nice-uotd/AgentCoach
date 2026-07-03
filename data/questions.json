@@ -1,0 +1,1938 @@
+[
+  {
+    "id": "arch_01",
+    "title": "为什么选择 ReAct 模式而不是 Plan-and-Execute？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "ReAct",
+      "agent",
+      "架构",
+      "实时交互"
+    ],
+    "rubric": [
+      "能说明ReAct适合实时交互场景,用户意图会变化",
+      "能说明Plan-and-Execute中间步骤失败需重做整个计划",
+      "能说明ReAct支持流式输出体验更好"
+    ],
+    "answer_key_points": "核心要点：1)ReAct适合实时交互场景,用户意图会变化; 2)Plan-and-Execute中间步骤失败需重做整个计划; 3)ReAct支持流式输出体验更好; 4)实际采用混合方案:简单任务单步ReAct,复杂任务先Plan再ReAct执行; 5)结果:响应时间3.2s(vs8s),任务完成率91%(vs78%)",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_02",
+    "title": "为什么采用多路检索而不是单一向量检索？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "多路检索",
+      "向量",
+      "BM25",
+      "RRF融合",
+      "知识图谱"
+    ],
+    "rubric": [
+      "能说明向量检索(Milvus语义)+关键词检索(ES BM25精确)+知识图谱检索(Neo4j关系)",
+      "能说明RRF融合算法:score=Σ1/(k+rank_i),k=60",
+      "能说明查询路由:精确查询→关键词,概念问题→向量,关系查询→图谱"
+    ],
+    "answer_key_points": "核心要点：1)向量检索(Milvus语义)+关键词检索(ES BM25精确)+知识图谱检索(Neo4j关系); 2)RRF融合算法:score=Σ1/(k+rank_i),k=60; 3)查询路由:精确查询→关键词,概念问题→向量,关系查询→图谱; 4)结果:Precision@5从72%→89%,Recall@20从65%→93%,精确编号查询命中率30%→98%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_03",
+    "title": "Agent 编排器是怎么设计的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "编排器",
+      "状态机",
+      "事件驱动",
+      "DAG"
+    ],
+    "rubric": [
+      "能说明状态机+事件驱动架构"
+    ],
+    "answer_key_points": "核心要点：1)状态机+事件驱动架构; 2)7个核心状态:INIT→INTENT_PARSED→PLANNED→EXECUTING→TOOL_CALLED→SYNTHESIZING→COMPLETED; 3)组件:AgentOrchestrator/TaskPlanner/ToolDispatcher/ContextManager; 4)用DAG支持并行子任务; 5)新工具接入从2天缩短到2小时; 6)并行调用使复杂任务时间缩短40%",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "arch_04",
+    "title": "多 Agent 协作和单 Agent 有什么区别？怎么选择？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "多Agent",
+      "协作",
+      "Supervisor",
+      "路由"
+    ],
+    "rubric": [
+      "能说明结构化消息传递(JSON Schema)"
+    ],
+    "answer_key_points": "核心要点：1)单Agent瓶颈:Prompt>4000tokens指令遵循下降,工具>15个选择准确率从95%→78%; 2)多Agent:Supervisor路由+RAG Agent+Tool Agent+Summary Agent; 3)结构化消息传递(JSON Schema); 4)选择标准:工具≤8且逻辑简单→单Agent,否则→多Agent; 5)结果:工具准确率回升96%,每个Agent Prompt<2000tokens",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_05",
+    "title": "意图识别模块是怎么实现的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "意图识别",
+      "两阶段",
+      "规则",
+      "LLM分类"
+    ],
+    "rubric": [
+      "能说明三级意图体系:L1咨询/操作/投诉→L2具体类型→L3具体场景",
+      "能说明置信度策略:≥0.85直接执行,0.6-0.85确认,<0.6追问"
+    ],
+    "answer_key_points": "核心要点：1)两阶段:第一阶段规则+FastText粗分类(<5ms覆盖80%),第二阶段LLM精细分类(多意图+实体提取); 2)三级意图体系:L1咨询/操作/投诉→L2具体类型→L3具体场景; 3)置信度策略:≥0.85直接执行,0.6-0.85确认,<0.6追问; 4)结果:准确率94%,多意图F1=0.89,LLM调用量减少80%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_06",
+    "title": "为什么选择 Milvus 而不是其他向量数据库？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "Milvus",
+      "向量数据库",
+      "选型",
+      "分布式"
+    ],
+    "rubric": [
+      "能说明排除FAISS(单机)、Chroma(轻量)、Pinecone(数据出境)",
+      "能说明对比Qdrant/Weaviate:Milvus千万级QPS2000+,原生分布式,支持多种索引",
+      "能说明支持标量过滤+向量混合查询"
+    ],
+    "answer_key_points": "核心要点：1)排除FAISS(单机)、Chroma(轻量)、Pinecone(数据出境); 2)对比Qdrant/Weaviate:Milvus千万级QPS2000+,原生分布式,支持多种索引; 3)支持标量过滤+向量混合查询; 4)POC结果:P99延迟45ms,召回率98.2%; 5)3节点集群稳定运行8个月,数据从200万→800万平滑扩展",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_07",
+    "title": "系统的可扩展性是怎么设计的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "可扩展",
+      "插件化",
+      "配置驱动"
+    ],
+    "rubric": [
+      "能说明插件化工具:BaseTool抽象类+ToolRegistry自动注册",
+      "能说明检索管道YAML配置驱动",
+      "能说明模型抽象层LLMProvider统一接口"
+    ],
+    "answer_key_points": "核心要点：1)插件化工具:BaseTool抽象类+ToolRegistry自动注册; 2)检索管道YAML配置驱动; 3)模型抽象层LLMProvider统一接口; 4)事件总线解耦; 5)结果:新工具2小时接入,新检索通道半天,切换模型改一行配置,6个月核心代码零修改",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_08",
+    "title": "如果让你重新设计这个系统，你会怎么改进？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "系统设计",
+      "改进",
+      "评估驱动",
+      "可观测性"
+    ],
+    "rubric": [
+      "能说明评估驱动开发:从项目开始就建自动化评估(RAGAS/DeepEval),CI跑500+case",
+      "能说明可观测性:第一行代码就接LangSmith/LangFuse全链路trace",
+      "能说明Streaming优先架构"
+    ],
+    "answer_key_points": "核心要点：1)评估驱动开发:从项目开始就建自动化评估(RAGAS/DeepEval),CI跑500+case; 2)可观测性:第一行代码就接LangSmith/LangFuse全链路trace; 3)Streaming优先架构; 4)更细粒度模型路由; 5)分层记忆系统(工作记忆+情景记忆+语义记忆)",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "arch_09",
+    "title": "你的系统能支持多少并发？怎么评估的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "并发",
+      "压测",
+      "QPS",
+      "性能评估"
+    ],
+    "rubric": [
+      "能说明Locust分布式压测,混合场景(简单40%+RAG30%+多轮20%+工具10%)",
+      "能说明50并发P99=2.8s,100并发P99=4.2s,200并发P99=8.5s错误率2.3%",
+      "能说明瓶颈在LLM API QPS限制"
+    ],
+    "answer_key_points": "核心要点：1)Locust分布式压测,混合场景(简单40%+RAG30%+多轮20%+工具10%); 2)50并发P99=2.8s,100并发P99=4.2s,200并发P99=8.5s错误率2.3%; 3)瓶颈在LLM API QPS限制; 4)安全容量150并发(P99<5s,错误率<0.5%); 5)弹性扩缩容:并发>120自动扩容",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "arch_10",
+    "title": "为什么要做模型路由？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "模型路由",
+      "成本优化",
+      "多模型"
+    ],
+    "rubric": [
+      "能说明查询分布:60%简单(小模型)+25%中等+15%高复杂度",
+      "能说明路由维度:任务复杂度/上下文长度/质量要求/用户等级",
+      "能说明模型矩阵:轻量(GPT-4o-mini)+标准(GPT-4o)+强力(GPT-"
+    ],
+    "answer_key_points": "核心要点：1)查询分布:60%简单(小模型)+25%中等+15%高复杂度; 2)路由维度:任务复杂度/上下文长度/质量要求/用户等级; 3)模型矩阵:轻量(GPT-4o-mini)+标准(GPT-4o)+强力(GPT-4); 4)轻量分类器判断(<3ms); 5)结果:成本降低62%(5万→1.9万),质量仅下降1.2%,延迟降低35%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_11",
+    "title": "怎么设计的对话管理和上下文维护？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "对话管理",
+      "上下文",
+      "滑动窗口",
+      "token预算"
+    ],
+    "rubric": [
+      "能说明分层上下文:系统层(800tokens)+会话层(滑动窗口)+检索层+工具层",
+      "能说明最近10轮保留原文,超出自动摘要",
+      "能说明Token预算分配:SystemPrompt10%+对话30%+检索40%+输出20%"
+    ],
+    "answer_key_points": "核心要点：1)分层上下文:系统层(800tokens)+会话层(滑动窗口)+检索层+工具层; 2)最近10轮保留原文,超出自动摘要; 3)Token预算分配:SystemPrompt10%+对话30%+检索40%+输出20%; 4)结果:上下文一致性76%→94%,支持50轮对话不丢失关键上下文",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_12",
+    "title": "你的系统支持哪些模型？怎么做模型适配的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "模型适配",
+      "Provider",
+      "统一接口"
+    ],
+    "rubric": [
+      "能说明LLMProvider抽象接口:chat/stream_chat/count_tokens",
+      "能说明适配器:OpenAI/Anthropic/Qwen/Local(vLLM/Ollama)",
+      "能说明差异化处理:Function Calling格式/Tokenizer/流式响应格式统一"
+    ],
+    "answer_key_points": "核心要点：1)LLMProvider抽象接口:chat/stream_chat/count_tokens; 2)适配器:OpenAI/Anthropic/Qwen/Local(vLLM/Ollama); 3)差异化处理:Function Calling格式/Tokenizer/流式响应格式统一; 4)结果:支持6种Provider,新模型1天适配,切换改配置",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_13",
+    "title": "如何处理长文档输入？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "长文档",
+      "分块",
+      "Map-Reduce",
+      "context",
+      "window"
+    ],
+    "rubric": [
+      "能说明Map-Reduce:各chunk独立摘要→综合总结",
+      "能说明Refine:逐chunk迭代处理"
+    ],
+    "answer_key_points": "核心要点：1)语义分块:递归分隔符(\\n\\n→\\n→句号),chunk_size=512tokens,overlap=10%; 2)Map-Reduce:各chunk独立摘要→综合总结; 3)Refine:逐chunk迭代处理; 4)智能截断:RAG取top-5 chunk+reranker精排; 5)结果:支持50万字文档,Map-Reduce准确率88%,实时问答<3s",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_14",
+    "title": "系统的安全架构是怎么设计的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "安全",
+      "Prompt注入",
+      "数据脱敏",
+      "RBAC"
+    ],
+    "rubric": [
+      "能说明输入安全:特殊字符转义+注入检测分类器+角色隔离",
+      "能说明数据安全:PII脱敏+知识库RBAC+日志脱敏",
+      "能说明输出安全:内容审核+置信度免责+答案溯源"
+    ],
+    "answer_key_points": "核心要点：1)输入安全:特殊字符转义+注入检测分类器+角色隔离; 2)数据安全:PII脱敏+知识库RBAC+日志脱敏; 3)输出安全:内容审核+置信度免责+答案溯源; 4)系统安全:JWT+API Key双认证+速率限制(20次/分钟); 5)结果:注入拦截率97%,零数据泄露",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_15",
+    "title": "你怎么看待 MCP？在系统中怎么使用的？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "MCP",
+      "工具协议",
+      "标准化",
+      "JSON-RPC"
+    ],
+    "rubric": [
+      "能说明MCP三大原语:tools/resources/prompts",
+      "能说明vs Function Calling:MCP开放协议跨模型复用,FC是厂商私有",
+      "能说明应用:现有工具封装为MCP Server对外标准化接口"
+    ],
+    "answer_key_points": "核心要点：1)MCP三大原语:tools/resources/prompts; 2)vs Function Calling:MCP开放协议跨模型复用,FC是厂商私有; 3)应用:现有工具封装为MCP Server对外标准化接口; 4)混合方案:简单工具用FC(70%),复杂服务用MCP(30%); 5)结果:新工具接入从2天→4小时",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_16",
+    "title": "如何设计 Agent 的错误恢复和重试机制？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "错误恢复",
+      "重试",
+      "熔断",
+      "降级"
+    ],
+    "rubric": [
+      "能说明分层:可恢复(指数退避重试max3次)→可降级(切备用模型)→不可恢复(报告用户)",
+      "能说明退避公式:delay=base*(2^attempt)+jitter",
+      "能说明Agent自愈:失败信息返回给LLM决定换参数/换工具/告知用户"
+    ],
+    "answer_key_points": "核心要点：1)分层:可恢复(指数退避重试max3次)→可降级(切备用模型)→不可恢复(报告用户); 2)退避公式:delay=base*(2^attempt)+jitter; 3)Agent自愈:失败信息返回给LLM决定换参数/换工具/告知用户; 4)断点续传:中间状态存Redis; 5)结果:用户可见错误5%→0.3%,可用性99.5%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_17",
+    "title": "你的系统支持多租户吗？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "多租户",
+      "数据隔离",
+      "限流"
+    ],
+    "rubric": [
+      "能说明数据隔离:Milvus独立Collection+独立DB schema+Redis key前缀",
+      "能说明配置独立:每租户自定义Prompt/工具/模型/检索策略",
+      "能说明资源限制:Redis令牌桶限流+独立QPS配额"
+    ],
+    "answer_key_points": "核心要点：1)数据隔离:Milvus独立Collection+独立DB schema+Redis key前缀; 2)配置独立:每租户自定义Prompt/工具/模型/检索策略; 3)资源限制:Redis令牌桶限流+独立QPS配额; 4)结果:支持20+企业客户,零数据泄露,单客户异常不影响其他",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "arch_18",
+    "title": "你怎么看 Agent 架构的未来发展？",
+    "category": "架构设计",
+    "difficulty": "hard",
+    "tags": [
+      "Agent趋势",
+      "多模态",
+      "自我进化"
+    ],
+    "rubric": [
+      "能说明近期:工作流+自主决策混合,长期记忆突破,多模态Agent",
+      "能说明中期:Agent间协议标准化,自我进化(从历史中学习优化),端到端开发平台"
+    ],
+    "answer_key_points": "核心要点：1)近期:工作流+自主决策混合,长期记忆突破,多模态Agent; 2)中期:Agent间协议标准化,自我进化(从历史中学习优化),端到端开发平台; 3)核心观点:Agent价值是信息和工具的桥梁,确定性和灵活性平衡是核心挑战,可观测性+可控性是企业落地关键",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "tech_01",
+    "title": "向量数据库是怎么选型的？分块策略是什么？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "向量数据库",
+      "分块",
+      "chunking",
+      "语义分块"
+    ],
+    "rubric": [
+      "能说明选Milvus(详见架构Q",
+      "能说明语义分块:计算句子embedding,余弦相似度<0.7为语义断点"
+    ],
+    "answer_key_points": "核心要点：1)选Milvus(详见架构Q6); 2)递归字符分块:分隔符优先级\\n\\n→\\n→句号→逗号,chunk_size=512,overlap=50tokens; 3)语义分块:计算句子embedding,余弦相似度<0.7为语义断点; 4)结构化分块:Markdown按标题,代码按函数; 5)结果:语义分块比固定长度准确率+12%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_02",
+    "title": "ReAct 的 Prompt 是怎么设计的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "ReAct",
+      "Prompt",
+      "Thought",
+      "Action",
+      "Observation"
+    ],
+    "rubric": [
+      "能说明工具描述精确(什么时候用+参数格式)",
+      "能说明安全兜底max_iterations"
+    ],
+    "answer_key_points": "核心要点：1)格式:Thought→Action→Action Input→Observation→Final Answer; 2)工具描述精确(什么时候用+参数格式); 3)安全兜底max_iterations; 4)Few-shot示例2-3个; 5)版本管理+A/B测试; 6)解析:正则锚点+格式不标准时LLM修复兜底; 7)结果:格式遵循率96%,工具选择准确率95%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_03",
+    "title": "熔断器是怎么实现的？三个状态是什么？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "熔断器",
+      "Circuit",
+      "Breaker",
+      "CLOSED",
+      "OPEN"
+    ],
+    "rubric": [
+      "能说明CLOSED(正常)→OPEN(熔断)→HALF_OPEN(探测)",
+      "能说明转换:60s内失败率>50%(≥10次请求)→OPEN",
+      "能说明OPEN 30s后→HALF_OPEN"
+    ],
+    "answer_key_points": "核心要点：1)CLOSED(正常)→OPEN(熔断)→HALF_OPEN(探测); 2)转换:60s内失败率>50%(≥10次请求)→OPEN; 3)OPEN 30s后→HALF_OPEN; 4)连续3次探测成功→CLOSED,任何失败→重新OPEN; 5)降级:返回缓存/切备用模型/兜底话术; 6)结果:响应从30s(超时等待)→100ms(快速失败)",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_04",
+    "title": "记忆系统的短期和长期记忆是怎么配合的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "记忆系统",
+      "短期记忆",
+      "长期记忆",
+      "Redis"
+    ],
+    "rubric": [
+      "能说明短期(Working Memory):内存+Redis,最近10轮完整,超出摘要压缩,30分钟过期",
+      "能说明长期:PostgreSQL+Milvus,存用户画像/历史摘要/FAQ",
+      "能说明短期→长期:会话结束LLM提取关键信息"
+    ],
+    "answer_key_points": "核心要点：1)短期(Working Memory):内存+Redis,最近10轮完整,超出摘要压缩,30分钟过期; 2)长期:PostgreSQL+Milvus,存用户画像/历史摘要/FAQ; 3)短期→长期:会话结束LLM提取关键信息; 4)长期→短期:新会话加载画像+语义检索历史; 5)结果:跨会话一致性30%→78%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_05",
+    "title": "文档解析支持哪些格式？怎么处理表格和图片？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "文档解析",
+      "PDF",
+      "OCR",
+      "表格处理"
+    ],
+    "rubric": [
+      "能说明表格:简单表格→Markdown格式,复杂表格→结构化描述+摘要",
+      "能说明图片:PaddleOCR提取文字+GPT-4V生成图片描述"
+    ],
+    "answer_key_points": "核心要点：1)PDF(PyMuPDF+pdfplumber)/Word(python-docx)/Excel/PPT/HTML/Markdown; 2)表格:简单表格→Markdown格式,复杂表格→结构化描述+摘要; 3)图片:PaddleOCR提取文字+GPT-4V生成图片描述; 4)质量保证:评估集100份+每周人工抽查; 5)结果:覆盖98%企业文档,表格提取91%,OCR 94%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_06",
+    "title": "重排序是怎么做的？用的什么模型？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "重排序",
+      "Reranker",
+      "BGE-Reranker"
+    ],
+    "rubric": [
+      "能说明模型:BGE-Reranker-v2-M3(中英文,568MB)",
+      "能说明流程:多路结果(~40条)→去重(MinHash>0.",
+      "能说明GPU batch推理,40条耗时120ms"
+    ],
+    "answer_key_points": "核心要点：1)模型:BGE-Reranker-v2-M3(中英文,568MB); 2)流程:多路结果(~40条)→去重(MinHash>0.9)→Reranker打分→Top-5; 3)GPU batch推理,40条耗时120ms; 4)阈值:≥0.7高相关,0.4-0.7补充,<0.4丢弃,全<0.4→无结果; 5)结果:Precision@5从78%→92%,NDCG@5从0.72→0.89",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_07",
+    "title": "Function Calling 和 MCP 有什么区别？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "Function",
+      "Calling",
+      "MCP",
+      "工具调用",
+      "对比"
+    ],
+    "rubric": [
+      "能说明FC:模型侧定义,原生支持,简单直接,耦合厂商",
+      "能说明MCP:独立服务,开放协议,跨模型复用,双向通信,权限控制",
+      "能说明选择:简单内部工具→FC(70%),复杂外部服务→MCP(30%)"
+    ],
+    "answer_key_points": "核心要点：1)FC:模型侧定义,原生支持,简单直接,耦合厂商; 2)MCP:独立服务,开放协议,跨模型复用,双向通信,权限控制; 3)选择:简单内部工具→FC(70%),复杂外部服务→MCP(30%); 4)底层统一抽象,业务不感知; 5)MCP额外开销~5ms,可接受",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "tech_08",
+    "title": "会话摘要压缩的阈值是多少？怎么确定的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "会话摘要",
+      "压缩",
+      "阈值",
+      "token节省"
+    ],
+    "rubric": [
+      "能说明阈值:对话历史占context 40%时触发(8K下即3200tokens)",
+      "能说明实验:30%压缩太频繁质量降8%,50%长对话容易超限,40%最优",
+      "能说明保留最近3轮原文不压缩"
+    ],
+    "answer_key_points": "核心要点：1)阈值:对话历史占context 40%时触发(8K下即3200tokens); 2)实验:30%压缩太频繁质量降8%,50%长对话容易超限,40%最优; 3)保留最近3轮原文不压缩; 4)增量摘要:每次压缩最旧3-5轮,新旧摘要合并; 5)压缩比4:1~6:1; 6)结果:支持50轮对话,理解准确率91%,token节省60%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_09",
+    "title": "RRF 融合排序的公式是什么？权重怎么调？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "RRF",
+      "融合排序",
+      "权重调优"
+    ],
+    "rubric": [
+      "能说明公式:RRF_score(d)=Σ1/(k+rank_i(d)),k=60",
+      "能说明为什么不用分数融合:不同通道量纲不同,RRF只看排名",
+      "能说明加权WRRF:向量0.6/关键词0.3/知识图谱0.1"
+    ],
+    "answer_key_points": "核心要点：1)公式:RRF_score(d)=Σ1/(k+rank_i(d)),k=60; 2)为什么不用分数融合:不同通道量纲不同,RRF只看排名; 3)加权WRRF:向量0.6/关键词0.3/知识图谱0.1; 4)调优:500条标注集+网格搜索+NDCG@5优化; 5)k=60是经典值(Microsoft论文); 6)结果:加权比等权NDCG+3.2%,比纯向量Precision@5+17%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_10",
+    "title": "嵌入模型用的什么？维度多少？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "嵌入模型",
+      "BGE-M3",
+      "维度",
+      "MTEB"
+    ],
+    "rubric": [
+      "能说明选BGE-M3:中文Recall@10最高94.3%,支持中英日韩跨语言",
+      "能说明维度1024,平衡效果和效率",
+      "能说明支持稠密/稀疏/多向量三种表示"
+    ],
+    "answer_key_points": "核心要点：1)选BGE-M3:中文Recall@10最高94.3%,支持中英日韩跨语言; 2)维度1024,平衡效果和效率; 3)支持稠密/稀疏/多向量三种表示; 4)本地部署ONNX Runtime,无数据出境; 5)GPU T4单条15ms,batch1000条3s; 6)800万文档索引约32GB",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "tech_11",
+    "title": "Guardrails（护栏）是怎么实现的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "Guardrails",
+      "护栏",
+      "输入安全",
+      "输出安全"
+    ],
+    "rubric": [
+      "能说明输入侧:Prompt注入检测+PII检测+长度限制+话题过滤",
+      "能说明输出侧:格式检查(JSON Schema)+内容安全审核+事实核查+幻觉检测",
+      "能说明可扩展:BaseGuardrail抽象+Pipeline快速失败"
+    ],
+    "answer_key_points": "核心要点：1)输入侧:Prompt注入检测+PII检测+长度限制+话题过滤; 2)输出侧:格式检查(JSON Schema)+内容安全审核+事实核查+幻觉检测; 3)可扩展:BaseGuardrail抽象+Pipeline快速失败; 4)结果:注入拦截97%,内容合规99.8%,幻觉检测覆盖85%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_12",
+    "title": "怎么实现的 Streaming 流式输出？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "Streaming",
+      "流式",
+      "SSE",
+      "TTFT"
+    ],
+    "rubric": [
+      "能说明全链路:LLM SSE→后端异步生成器→API Gateway SSE→前端EventSource",
+      "能说明关键:Nginx禁用缓冲+15s心跳保活+错误处理+取消机制",
+      "能说明ReAct下:Thought不输出,Action输出状态提示,Final Answer流式输出"
+    ],
+    "answer_key_points": "核心要点：1)全链路:LLM SSE→后端异步生成器→API Gateway SSE→前端EventSource; 2)关键:Nginx禁用缓冲+15s心跳保活+错误处理+取消机制; 3)ReAct下:Thought不输出,Action输出状态提示,Final Answer流式输出; 4)结果:TTFT从3s→500ms,感知速度5x,满意度+22%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_13",
+    "title": "怎么做的日志和链路追踪？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "日志",
+      "链路追踪",
+      "OpenTelemetry",
+      "trace"
+    ],
+    "rubric": [
+      "能说明结构化日志:trace_id+span_id+时间+服务+事件+延迟",
+      "能说明工具栈:Prometheus+Grafana+ELK+Jaeger+LangFuse"
+    ],
+    "answer_key_points": "核心要点：1)结构化日志:trace_id+span_id+时间+服务+事件+延迟; 2)OpenTelemetry链路:每个阶段独立span(意图识别50ms→检索250ms→rerank130ms→LLM2500ms); 3)工具栈:Prometheus+Grafana+ELK+Jaeger+LangFuse; 4)告警:P99>10s/错误率>1%/幻觉率>5%; 5)结果:问题定位从2h→15min",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_14",
+    "title": "怎么做的异步并行处理？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "异步",
+      "asyncio",
+      "gather",
+      "并行"
+    ],
+    "rubric": [
+      "能说明框架:Python asyncio+FastAPI全异步+httpx.AsyncClient",
+      "能说明并行场景:多路检索gather/多工具并行/批量embedding",
+      "能说明并发控制:Semaphore限制LLM50并发,DB连接池20"
+    ],
+    "answer_key_points": "核心要点：1)框架:Python asyncio+FastAPI全异步+httpx.AsyncClient; 2)并行场景:多路检索gather/多工具并行/批量embedding; 3)并发控制:Semaphore限制LLM50并发,DB连接池20; 4)离线:Celery队列(文档索引/摘要归档); 5)结果:检索500ms→200ms,QPS提升2.5x,入库速度4x",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_15",
+    "title": "知识图谱是怎么构建和使用的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "知识图谱",
+      "Neo4j",
+      "实体抽取",
+      "Cypher"
+    ],
+    "rubric": [
+      "能说明构建:LLM抽取实体→LLM抽取关系→去重合并→Neo4j",
+      "能说明查询:意图识别→生成Cypher→结果与向量检索融合"
+    ],
+    "answer_key_points": "核心要点：1)构建:LLM抽取实体→LLM抽取关系→去重合并→Neo4j; 2)Schema:Person/Product/Department/Project节点+MANAGES/BELONGS_TO等关系; 3)查询:意图识别→生成Cypher→结果与向量检索融合; 4)置信度<0.8进人工审核; 5)结果:5万实体12万关系,实体关系查询45%→87%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_16",
+    "title": "怎么做的 A/B 测试和 Prompt 版本管理？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "AB测试",
+      "Prompt版本",
+      "灰度发布"
+    ],
+    "rubric": [
+      "能说明Prompt存数据库有版本号,支持按百分比灰度",
+      "能说明A/B:用户ID hash分组,每实验7天或1000次对话",
+      "能说明指标:BERTScore+格式遵循率+人工3人打分"
+    ],
+    "answer_key_points": "核心要点：1)Prompt存数据库有版本号,支持按百分比灰度; 2)A/B:用户ID hash分组,每实验7天或1000次对话; 3)指标:BERTScore+格式遵循率+人工3人打分; 4)决策:核心指标≥2%提升+p<0.05; 5)结果:发现3个看似改进实际退步的修改,质量6月稳步+18%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_17",
+    "title": "Token 计数和费用统计是怎么实现的？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "Token计数",
+      "tiktoken",
+      "费用统计"
+    ],
+    "rubric": [
+      "能说明输出token:从API response usage获取",
+      "能说明统计维度:按租户/功能/模型/时间"
+    ],
+    "answer_key_points": "核心要点：1)输入token:tiktoken(OpenAI)/Anthropic API/HF tokenizer; 2)输出token:从API response usage获取; 3)统计维度:按租户/功能/模型/时间; 4)预算告警:80%提醒,100%限制或降级; 5)结果:计数误差<2%,发现摘要模块占25%消耗,优化后降40%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "tech_18",
+    "title": "怎么做的数据预处理和数据清洗？",
+    "category": "技术实现",
+    "difficulty": "medium",
+    "tags": [
+      "数据预处理",
+      "清洗",
+      "去重",
+      "MinHash"
+    ],
+    "rubric": [
+      "能说明管道:格式转换→文本提取→清洗→去重→质量评估→分块→入库",
+      "能说明清洗:去噪(页眉页脚)+格式标准化(UTF-",
+      "能说明去重:MD5完全重复+MinHash近似(Jaccard>0.8"
+    ],
+    "answer_key_points": "核心要点：1)管道:格式转换→文本提取→清洗→去重→质量评估→分块→入库; 2)清洗:去噪(页眉页脚)+格式标准化(UTF-8)+OCR纠错+PII脱敏; 3)去重:MD5完全重复+MinHash近似(Jaccard>0.85)+跨版本保留最新; 4)质量评估:长度+语义完整+信息密度; 5)结果:准确率+8%,存储-15%,幻觉率-12%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_01",
+    "title": "Token 成本是怎么控制的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "Token",
+      "成本",
+      "模型路由",
+      "Prompt精简",
+      "缓存"
+    ],
+    "rubric": [
+      "能说明模型路由:60%简单→GPT-4o-mini(成本1/1",
+      "能说明Prompt精简:1500→800tokens+工具描述动态注入",
+      "能说明上下文:top-10→top-5+对话摘要压缩(-30%context)"
+    ],
+    "answer_key_points": "核心要点：1)模型路由:60%简单→GPT-4o-mini(成本1/17),仅15%复杂→GPT-4o; 2)Prompt精简:1500→800tokens+工具描述动态注入; 3)上下文:top-10→top-5+对话摘要压缩(-30%context); 4)语义缓存15%命中+FAQ缓存; 5)输出max_tokens限制; 6)结果:月成本5万→1.9万(-62%),质量仅降1.2%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_02",
+    "title": "延迟优化做了哪些措施？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "延迟优化",
+      "P99",
+      "TTFT",
+      "并行",
+      "流式"
+    ],
+    "rubric": [
+      "能说明检索并行化(-300ms)+模型路由(简单走快模型)+流式TTFT500ms",
+      "能说明预加载:意图+检索并行"
+    ],
+    "answer_key_points": "核心要点：1)链路:意图300ms+检索500→200ms(并行)+Rerank130ms+LLM4500→2500ms; 2)检索并行化(-300ms)+模型路由(简单走快模型)+流式TTFT500ms; 3)预加载:意图+检索并行; 4)连接池复用(-50ms)+语义缓存(<100ms); 5)结果:P50从6.5s→2.8s,P99从15s→5.2s,满意度+22%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_03",
+    "title": "缓存策略是什么？命中率多少？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "缓存",
+      "Redis",
+      "语义缓存",
+      "多层",
+      "命中率"
+    ],
+    "rubric": [
+      "能说明L1精确匹配(MD5 hash,Redis,TTL24h,命中8%)",
+      "能说明L2语义缓存(embedding相似>0.95,TTL12h,命中7%)",
+      "能说明L3 FAQ预计算(Top-200高频,长期有效,5%)"
+    ],
+    "answer_key_points": "核心要点：1)L1精确匹配(MD5 hash,Redis,TTL24h,命中8%); 2)L2语义缓存(embedding相似>0.95,TTL12h,命中7%); 3)L3 FAQ预计算(Top-200高频,长期有效,5%); 4)更新:被动TTL+知识库更新主动失效+启动预热; 5)总命中率20%,命中延迟<100ms(vs LLM 3s),节省20% API成本",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "perf_04",
+    "title": "流式输出性能怎么优化的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "流式",
+      "TTFT",
+      "TBT",
+      "SSE",
+      "性能"
+    ],
+    "rubric": [
+      "能说明TTFT<500ms:意图+检索在LLM前完成",
+      "能说明TBT:选快速模型(GPT-4o-mini~10ms/token)+后端零缓冲",
+      "能说明工具调用:检测Action→发'正在查询...'+完成后继续流式Final Answer"
+    ],
+    "answer_key_points": "核心要点：1)TTFT<500ms:意图+检索在LLM前完成; 2)TBT:选快速模型(GPT-4o-mini~10ms/token)+后端零缓冲; 3)工具调用:检测Action→发'正在查询...'+完成后继续流式Final Answer; 4)前端:token缓冲50ms批量DOM更新+requestAnimationFrame; 5)结果:TTFT P50=450ms,感知速度5x,满意度+22%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_05",
+    "title": "异步处理在哪些地方使用了？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "异步",
+      "asyncio",
+      "gather",
+      "Celery",
+      "并行"
+    ],
+    "rubric": [
+      "能说明实时(async/await):LLM API+向量检索+ES查询+FastAPI全异步",
+      "能说明准实时(异步队列):对话入库+行为日志+告警推送",
+      "能说明离线(Celery):文档索引+KG更新+摘要归档+报表"
+    ],
+    "answer_key_points": "核心要点：1)实时(async/await):LLM API+向量检索+ES查询+FastAPI全异步; 2)准实时(异步队列):对话入库+行为日志+告警推送; 3)离线(Celery):文档索引+KG更新+摘要归档+报表; 4)并行编排:asyncio.gather(intent,retrieval); 5)结果:QPS30→85(2.8x),文档索引4x,内存更平稳",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_06",
+    "title": "数据库查询是怎么优化的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "数据库",
+      "Milvus",
+      "PostgreSQL",
+      "Redis",
+      "HNSW"
+    ],
+    "rubric": [
+      "能说明Milvus:HNSW(M=16,ef=12",
+      "能说明PostgreSQL:组合索引+EXPLAIN慢查询+对话表按月分区+连接池min5/max20"
+    ],
+    "answer_key_points": "核心要点：1)Milvus:HNSW(M=16,ef=128)<100万/IVF_SQ8>100万+按租户分Collection; 2)PostgreSQL:组合索引+EXPLAIN慢查询+对话表按月分区+连接池min5/max20; 3)Redis:数据结构选型+Key规范{service}:{tenant}:{type}:{id}+热key打散; 4)避免N+1+预编译+只查需要字段; 5)结果:向量P99<50ms,慢查询200→5/日",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_07",
+    "title": "模型推理速度是怎么优化的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "推理优化",
+      "INT8",
+      "ONNX",
+      "批处理",
+      "量化"
+    ],
+    "rubric": [
+      "能说明量化:BGE-M3 INT8量化,精度损失<0.5%,速度+40%",
+      "能说明引擎:ONNX Runtime替代PyTorch(+30%)+CUDA+TensorRT",
+      "能说明Batching:Embedding batch=64+Reranker一次40条+动态批处理"
+    ],
+    "answer_key_points": "核心要点：1)量化:BGE-M3 INT8量化,精度损失<0.5%,速度+40%; 2)引擎:ONNX Runtime替代PyTorch(+30%)+CUDA+TensorRT; 3)Batching:Embedding batch=64+Reranker一次40条+动态批处理; 4)预加载:启动时模型加载到GPU显存; 5)结果:Embedding单条15ms,batch1000条3s(均摊3ms),GPU利用率30%→75%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_08",
+    "title": "前端渲染性能怎么优化？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "前端",
+      "DOM",
+      "虚拟滚动",
+      "requestAnimationFrame"
+    ],
+    "rubric": [
+      "能说明长对话:虚拟滚动(只渲染可视区)+分页历史加载",
+      "能说明内存:及时清理EventSource+WeakRef消息引用"
+    ],
+    "answer_key_points": "核心要点：1)流式token缓冲:累积50ms批量DOM更新+requestAnimationFrame控制频率+Markdown渐进式渲染; 2)长对话:虚拟滚动(只渲染可视区)+分页历史加载; 3)内存:及时清理EventSource+WeakRef消息引用; 4)结果:流式FPS30→60,100+轮对话流畅,内存-40%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_09",
+    "title": "冷启动问题是怎么解决的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "冷启动",
+      "K8s",
+      "readiness",
+      "预热",
+      "预加载"
+    ],
+    "rubric": [
+      "能说明模型预加载:K8s readinessProbe确认后才接流量+共享存储避免下载(~30s)",
+      "能说明缓存预热:启动加载FAQ+热门缓存+peer同步+预热前降级",
+      "能说明连接池预建:DB最小连接+Redis PING"
+    ],
+    "answer_key_points": "核心要点：1)模型预加载:K8s readinessProbe确认后才接流量+共享存储避免下载(~30s); 2)缓存预热:启动加载FAQ+热门缓存+peer同步+预热前降级; 3)连接池预建:DB最小连接+Redis PING; 4)流量预热:负载均衡权重渐增; 5)结果:冷启动120s→45s,请求成功率70%→98%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_10",
+    "title": "网络传输是怎么优化的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "网络",
+      "API端点",
+      "HTTP2",
+      "压缩",
+      "容灾"
+    ],
+    "rubric": [
+      "能说明API端点:Azure亚太区(跨洋200ms→40ms)",
+      "能说明连接:HTTP/2多路复用+连接池复用+Keep-Alive120s",
+      "能说明压缩:gzip+Prompt去无用空格换行"
+    ],
+    "answer_key_points": "核心要点：1)API端点:Azure亚太区(跨洋200ms→40ms); 2)连接:HTTP/2多路复用+连接池复用+Keep-Alive120s; 3)压缩:gzip+Prompt去无用空格换行; 4)多线路容灾:主备端点,主超3s自动切备; 5)结果:网络延迟200→40ms,超时错误-80%,可用性99.9%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_11",
+    "title": "Embedding 计算是怎么优化的？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "Embedding",
+      "批量",
+      "多GPU",
+      "DataParallel",
+      "增量"
+    ],
+    "rubric": [
+      "能说明批量:batch=256最大化GPU+DataLoader预加载避免等待",
+      "能说明增量:MD5检测变更只重算+新增实时计算不全量重建",
+      "能说明多GPU:DataParallel 4×T4,吞吐3.6x"
+    ],
+    "answer_key_points": "核心要点：1)批量:batch=256最大化GPU+DataLoader预加载避免等待; 2)增量:MD5检测变更只重算+新增实时计算不全量重建; 3)多GPU:DataParallel 4×T4,吞吐3.6x; 4)可选PCA 1024→512维(召回仅-1.2%,存储-50%); 5)结果:800万chunk全量48h→12h,增量1000条<30s,GPU80%+",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "perf_12",
+    "title": "怎么做的资源监控和自动扩缩容？",
+    "category": "性能优化",
+    "difficulty": "medium",
+    "tags": [
+      "扩缩容",
+      "HPA",
+      "K8s",
+      "监控",
+      "弹性"
+    ],
+    "rubric": [
+      "能说明指标:基础(CPU/MEM)+业务(QPS/P99/错误率)+自定义(队列积压/缓存命中)",
+      "能说明HPA:QPS>50/Pod扩容,<20持续5min缩容,min2/max10",
+      "能说明预测性:历史数据预测高峰+已知事件手动预扩"
+    ],
+    "answer_key_points": "核心要点：1)指标:基础(CPU/MEM)+业务(QPS/P99/错误率)+自定义(队列积压/缓存命中); 2)HPA:QPS>50/Pod扩容,<20持续5min缩容,min2/max10; 3)预测性:历史数据预测高峰+已知事件手动预扩; 4)结果:高峰自动8Pod/低谷2Pod,成本-35%,P99<5s",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_01",
+    "title": "Agent 死循环怎么检测和防止的？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "死循环",
+      "max_iterations",
+      "重复检测",
+      "强制结束"
+    ],
+    "rubric": [
+      "能说明智能检测:连续2次相同工具+相同参数=循环+每3轮检查进展",
+      "能说明处理:注入提示'请尝试不同方法'→仍循环→强制Final Answer"
+    ],
+    "answer_key_points": "核心要点：1)硬限制:max_iterations=10+max_time=60s+max_token=30000; 2)智能检测:连续2次相同工具+相同参数=循环+每3轮检查进展; 3)处理:注入提示'请尝试不同方法'→仍循环→强制Final Answer; 4)根因分析:记录日志,常见原因工具描述不清/Prompt矛盾/检索质量差; 5)结果:死循环3%→0.2%,99.8%在5轮内完成",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_02",
+    "title": "模型幻觉怎么控制的？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "幻觉",
+      "RAG引用",
+      "NLI检查",
+      "温度控制"
+    ],
+    "rubric": [
+      "能说明RAG基础:所有回答基于检索片段+Prompt声明'信息不足请说无法回答'",
+      "能说明引用机制:要求标注[参考1]+后处理验证引用真实",
+      "能说明幻觉检测:NLI推断+关键实体核验+3次生成自我一致性"
+    ],
+    "answer_key_points": "核心要点：1)RAG基础:所有回答基于检索片段+Prompt声明'信息不足请说无法回答'; 2)引用机制:要求标注[参考1]+后处理验证引用真实; 3)幻觉检测:NLI推断+关键实体核验+3次生成自我一致性; 4)降级:rerank<0.4→'暂无信息'+检测幻觉→添加'仅供参考'; 5)温度:事实=0,创意=0.7; 6)结果:幻觉率18%→3%,关键场景<0.5%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_03",
+    "title": "模型超时怎么处理？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "超时",
+      "重试",
+      "降级",
+      "备用模型",
+      "兜底"
+    ],
+    "rubric": [
+      "能说明分级超时:连接5s+首token10s+总60s",
+      "能说明流程:首次超时→切备用端点重试1次→备用模型→兜底话术",
+      "能说明降级矩阵:GPT-4o→GPT-4o-mini→缓存/话术"
+    ],
+    "answer_key_points": "核心要点：1)分级超时:连接5s+首token10s+总60s; 2)流程:首次超时→切备用端点重试1次→备用模型→兜底话术; 3)降级矩阵:GPT-4o→GPT-4o-mini→缓存/话术; 4)用户侧:流式有部分输出→'可能不完整';非流式→'正在处理'+重试按钮; 5)结果:用户可见超时5%→0.5%,降级接受率85%,不可用时可用性0%→95%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_04",
+    "title": "检索结果不准确怎么办？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "检索不准",
+      "Query重写",
+      "HyDE",
+      "Reranker",
+      "诊断"
+    ],
+    "rubric": [
+      "能说明诊断:分块切断?/Embedding不准?/top_k小?/数据质量?/查询模糊?",
+      "能说明Query重写:LLM口语→精确+'怎么退'→'退货退款流程'+多查询扩展",
+      "能说明HyDE:LLM生成假设答案→用其embedding检索(专业域+22%)"
+    ],
+    "answer_key_points": "核心要点：1)诊断:分块切断?/Embedding不准?/top_k小?/数据质量?/查询模糊?; 2)Query重写:LLM口语→精确+'怎么退'→'退货退款流程'+多查询扩展; 3)HyDE:LLM生成假设答案→用其embedding检索(专业域+22%); 4)后处理:Reranker精排+相邻chunk上下文扩展; 5)结果:重写+15%,HyDE专业+22%,投诉-60%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_05",
+    "title": "工具调用失败怎么处理？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "工具失败",
+      "自愈",
+      "重试",
+      "降级",
+      "错误分类"
+    ],
+    "rubric": [
+      "能说明Agent自愈:错误返回Observation→Agent决定改参数/换工具/告知用户",
+      "能说明标准化ToolError(type/message/retryable/suggestion)"
+    ],
+    "answer_key_points": "核心要点：1)分类:临时(超时/限流→重试2次)+参数错误(告知Agent修正)+权限(告知用户)+数据不存在(核实)+系统(降级); 2)Agent自愈:错误返回Observation→Agent决定改参数/换工具/告知用户; 3)标准化ToolError(type/message/retryable/suggestion); 4)兜底:连续3次失败→跳过基于已有信息回答; 5)结果:成功率92%→98%,自修正78%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_06",
+    "title": "多 Agent 之间通信失败怎么处理？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "多Agent",
+      "通信",
+      "健康检查",
+      "消息持久化"
+    ],
+    "rubric": [
+      "能说明超时:每Agent调用30s(复杂60s),超时由Supervisor决定重试/跳过",
+      "能说明健康检查:每10s ping,连续3次失败→标记不可用",
+      "能说明任务重分配:失败→同类型备份Agent,无备份→Supervisor降级处理"
+    ],
+    "answer_key_points": "核心要点：1)超时:每Agent调用30s(复杂60s),超时由Supervisor决定重试/跳过; 2)健康检查:每10s ping,连续3次失败→标记不可用; 3)任务重分配:失败→同类型备份Agent,无备份→Supervisor降级处理; 4)消息持久化:Redis Stream保证即使重启也不丢; 5)结果:单Agent故障不影响整体,重分配<5s,可用性99.5%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_07",
+    "title": "知识库数据不一致怎么处理？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "数据不一致",
+      "时效性",
+      "矛盾检测",
+      "NLI"
+    ],
+    "rubric": [
+      "能说明时效性:文档标记时间+近期权重更高+超1年标'可能过时'",
+      "能说明矛盾检测:NLI模型判断多chunk是否矛盾,矛盾时优先新文档+回答中说明",
+      "能说明数据巡检:每周自动检查链接/格式+每月人工抽查50份"
+    ],
+    "answer_key_points": "核心要点：1)时效性:文档标记时间+近期权重更高+超1年标'可能过时'; 2)矛盾检测:NLI模型判断多chunk是否矛盾,矛盾时优先新文档+回答中说明; 3)数据巡检:每周自动检查链接/格式+每月人工抽查50份; 4)用户反馈闭环:'回答错误'→触发人工审核→修正; 5)结果:过时误导-70%,矛盾检测覆盖80%,质量3.6→4.2/5",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_08",
+    "title": "高并发下的限流降级策略是什么？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "限流",
+      "令牌桶",
+      "降级",
+      "L0-L3",
+      "QPS"
+    ],
+    "rubric": [
+      "能说明三层限流:API网关全局500QPS+租户级50QPS+用户级20/min",
+      "能说明令牌桶(Redis):桶容量=2x QPS支持突发",
+      "能说明降级四级:L0正常→L1关非核心→L2模型降级→L3只缓存/FAQ"
+    ],
+    "answer_key_points": "核心要点：1)三层限流:API网关全局500QPS+租户级50QPS+用户级20/min; 2)令牌桶(Redis):桶容量=2x QPS支持突发; 3)降级四级:L0正常→L1关非核心→L2模型降级→L3只缓存/FAQ; 4)自动触发:QPS>80%→L1,LLM错误>10%→L2,CPU>90%→L3; 5)结果:5x突发核心可用,降级<200ms,零崩溃",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_09",
+    "title": "数据丢失和恢复策略是什么？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "备份",
+      "恢复",
+      "RPO",
+      "RTO",
+      "WAL"
+    ],
+    "rubric": [
+      "能说明数据分级:核心RPO=0(实时同步)+重要RPO<1h(增量备份)+可重建RPO<24h(日备)",
+      "能说明PG:流式复制主从+日全量+WAL归档",
+      "能说明季度灾备演练:模拟主故障/向量损坏/Redis清空"
+    ],
+    "answer_key_points": "核心要点：1)数据分级:核心RPO=0(实时同步)+重要RPO<1h(增量备份)+可重建RPO<24h(日备); 2)PG:流式复制主从+日全量+WAL归档; Milvus:snapshot+可重建; Redis:RDB+AOF; 3)季度灾备演练:模拟主故障/向量损坏/Redis清空; 4)结果:核心零丢失,DB恢复<5min(主从切换),向量重建~6h",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_10",
+    "title": "模型输出格式异常怎么处理？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "格式异常",
+      "解析",
+      "正则",
+      "LLM修复",
+      "降级"
+    ],
+    "rubric": [
+      "能说明监控:记录每次失败原因+遵循率<90%告警"
+    ],
+    "answer_key_points": "核心要点：1)四层解析:严格正则→宽松正则(忽略大小写/空格)→LLM轻量模型修复→降级整段作Final Answer; 2)预防:Prompt强调格式+提供示例+OpenAI JSON mode+Claude tool_use; 3)监控:记录每次失败原因+遵循率<90%告警; 4)结果:解析成功率82%→98%,LLM修复兜底5%,用户感知异常8%→0.5%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_11",
+    "title": "敏感信息泄露怎么防止？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "敏感信息",
+      "PII",
+      "脱敏",
+      "加密",
+      "日志安全"
+    ],
+    "rubric": [
+      "能说明输入脱敏:正则+NER识别手机/身份证/银行卡→替换[手机号_1],映射表临时内存",
+      "能说明输出还原:LLM回答中占位符→只还原有权信息",
+      "能说明LLM不可信:敏感数据绝不发LLM+TLS1.3传输"
+    ],
+    "answer_key_points": "核心要点：1)输入脱敏:正则+NER识别手机/身份证/银行卡→替换[手机号_1],映射表临时内存; 2)输出还原:LLM回答中占位符→只还原有权信息; 3)LLM不可信:敏感数据绝不发LLM+TLS1.3传输; 4)日志:脱敏后存储+最小权限访问; 5)结果:防护覆盖99.5%,零泄露,通过等保三级",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "fault_12",
+    "title": "系统容量规划是怎么做的？",
+    "category": "故障处理",
+    "difficulty": "medium",
+    "tags": [
+      "容量规划",
+      "Pod",
+      "QPS",
+      "增长预测"
+    ],
+    "rubric": [
+      "能说明模型:需Pod=峰值QPS/(单Pod QPS×0.",
+      "能说明资源:API Pod每个25QPS→200QPS需12Pod",
+      "能说明增长:历史线性回归预测3-6月+每季度评审"
+    ],
+    "answer_key_points": "核心要点：1)模型:需Pod=峰值QPS/(单Pod QPS×0.7),0.7安全系数; 2)资源:API Pod每个25QPS→200QPS需12Pod; Milvus千万48GB; Redis16GB; PG500GB/年; 3)增长:历史线性回归预测3-6月+每季度评审; 4)成本:预留实例-30~40%+非高峰缩容; 5)结果:300%增长平滑扩容零中断,利用率60-80%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_01",
+    "title": "怎么做的测试？覆盖率多少？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "测试",
+      "pytest",
+      "单元测试",
+      "集成",
+      "评估"
+    ],
+    "rubric": [
+      "能说明金字塔:单元60%+集成30%+E2E10%",
+      "能说明单元85%:Mock LLM+pytest+pytest-asyncio",
+      "能说明集成:检索管道相关性+Function Calling参数+testcontainers"
+    ],
+    "answer_key_points": "核心要点：1)金字塔:单元60%+集成30%+E2E10%; 2)单元85%:Mock LLM+pytest+pytest-asyncio; 3)集成:检索管道相关性+Function Calling参数+testcontainers; 4)评估(AI特有):500+标注集+RAGAS+Recall@10/BERTScore+CI每次自动跑; 5)压测:月度Locust全面; 6)结果:单元85%核心95%,上线严重bug-70%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_02",
+    "title": "怎么做的监控和告警？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "监控",
+      "Prometheus",
+      "Grafana",
+      "告警",
+      "LangFuse"
+    ],
+    "rubric": [
+      "能说明工具栈:Prometheus+Grafana+ELK+Jaeger+LangFuse",
+      "能说明告警:P99>10s电话P1/错误>5%P1/幻觉>5%P2/Token>200万P3"
+    ],
+    "answer_key_points": "核心要点：1)三维度:系统(CPU/MEM/Pod)+业务(QPS/P99/错误率)+AI(Token趋势/检索命中/幻觉率/Agent迭代/工具成功率); 2)工具栈:Prometheus+Grafana+ELK+Jaeger+LangFuse; 3)告警:P99>10s电话P1/错误>5%P1/幻觉>5%P2/Token>200万P3; 4)结果:发现时间从用户投诉→3min,覆盖100%,误报<5%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_03",
+    "title": "怎么部署的？CI/CD 是什么流程？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "CI",
+      "CD",
+      "Docker",
+      "K8s",
+      "灰度"
+    ],
+    "rubric": [
+      "能说明回滚:保留5版本镜像+一键rollout undo+灰度异常自动回滚"
+    ],
+    "answer_key_points": "核心要点：1)CI:提交→lint+type check→单元→集成→AI评估→安全扫描→Docker镜像(<15min); 2)CD:合入main→自动Staging→冒烟→人工验证→灰度10%→50%→100%(每阶段观察30min); 3)回滚:保留5版本镜像+一键rollout undo+灰度异常自动回滚; 4)Helm Chart+ConfigMap/Secret; 5)结果:周级发版,成功率98%,回滚<3min",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_04",
+    "title": "日志系统怎么设计的？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "日志",
+      "结构化",
+      "ELK",
+      "推理日志",
+      "脱敏"
+    ],
+    "rubric": [
+      "能说明存储:热7天ES全文检索+温30天压缩对象存储+冷1年低成本",
+      "能说明推理日志:生产默认摘要版(去Prompt全文),动态开启详细"
+    ],
+    "answer_key_points": "核心要点：1)分类:请求日志+推理日志(Thought→Action→Observation)+工具日志+审计日志; 2)存储:热7天ES全文检索+温30天压缩对象存储+冷1年低成本; 3)推理日志:生产默认摘要版(去Prompt全文),动态开启详细; 4)隐私:PII脱敏后存储; 5)结果:100%问题可排查,存储成本-60%,热<1s,温<10s",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_05",
+    "title": "安全性怎么保证的？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "安全",
+      "Prompt注入",
+      "红蓝对抗",
+      "OWASP"
+    ],
+    "rubric": [
+      "能说明常态化:500+注入样本库定期更新+每次发版安全测试+季度红蓝对抗",
+      "能说明更新流程:关注OWASP LLM Top10+社区攻击模式+48h内更新防护",
+      "能说明规范:用户输入不信任+System/User严格分离+工具参数白名单"
+    ],
+    "answer_key_points": "核心要点：1)常态化:500+注入样本库定期更新+每次发版安全测试+季度红蓝对抗; 2)更新流程:关注OWASP LLM Top10+社区攻击模式+48h内更新防护; 3)规范:用户输入不信任+System/User严格分离+工具参数白名单; 4)应急:10min紧急上线拦截规则(配置热更新); 5)结果:0次成功注入,规则更新<4h",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_06",
+    "title": "代码质量是怎么保证的？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "代码质量",
+      "ruff",
+      "mypy",
+      "review",
+      "圈复杂度"
+    ],
+    "rubric": [
+      "能说明规范:PEP8+内部补充+所有函数类型注解+ruff统一风格",
+      "能说明审查:所有PR≥1人review,核心模块≥2人,关注逻辑/异常/性能/安全",
+      "能说明静态:mypy strict+bandit安全+圈复杂度≤10"
+    ],
+    "answer_key_points": "核心要点：1)规范:PEP8+内部补充+所有函数类型注解+ruff统一风格; 2)审查:所有PR≥1人review,核心模块≥2人,关注逻辑/异常/性能/安全; 3)静态:mypy strict+bandit安全+圈复杂度≤10; 4)架构守护:依赖关系检查防循环+接口版本防破坏; 5)结果:review100%,类型90%,线上bug-50%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_07",
+    "title": "文档是怎么维护的？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "文档",
+      "ADR",
+      "API",
+      "Swagger",
+      "知识传递"
+    ],
+    "rubric": [
+      "能说明文档即代码:同仓库+随代码review+ADR记录技术决策",
+      "能说明自动化:OpenAPI Schema+类型注解→SDK文档+Dashboard配置导出"
+    ],
+    "answer_key_points": "核心要点：1)类型:架构文档+API(FastAPI Swagger自动)+运维手册+Prompt文档(模板/版本/设计思路); 2)文档即代码:同仓库+随代码review+ADR记录技术决策; 3)自动化:OpenAPI Schema+类型注解→SDK文档+Dashboard配置导出; 4)结果:新人上手2周→3天,文档代码同步>80%,ADR 30+份",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_08",
+    "title": "怎么做的版本管理和发布管理？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "版本",
+      "语义化",
+      "分支",
+      "发布",
+      "changelog"
+    ],
+    "rubric": [
+      "能说明语义化:MAJOR不兼容+MINOR新功能+PATCH修复",
+      "能说明分支:main(生产)+develop(集成)+feature/*+hotfix/*",
+      "能说明发布:develop冻结→release分支→集成测试→修bug→合main→打tag→部署"
+    ],
+    "answer_key_points": "核心要点：1)语义化:MAJOR不兼容+MINOR新功能+PATCH修复; 2)分支:main(生产)+develop(集成)+feature/*+hotfix/*; 3)发布:develop冻结→release分支→集成测试→修bug→合main→打tag→部署; 4)Changelog:commit message自动生成分类; 5)结果:每周定期+紧急随时,零版本混乱事故",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_09",
+    "title": "怎么做技术债务管理？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "技术债务",
+      "Sprint",
+      "TODO",
+      "重构"
+    ],
+    "rubric": [
+      "能说明识别:Code Review标记TODO:tech-debt+Sprint回顾收集+静态分析检测",
+      "能说明分级:P0影响稳定/安全→下Sprint必修+P1维护/性能→1月内+P2风格→机会修",
+      "能说明偿还:每Sprint预留20%工时+大重构专项+童子军规则随手修"
+    ],
+    "answer_key_points": "核心要点：1)识别:Code Review标记TODO:tech-debt+Sprint回顾收集+静态分析检测; 2)分级:P0影响稳定/安全→下Sprint必修+P1维护/性能→1月内+P2风格→机会修; 3)偿还:每Sprint预留20%工时+大重构专项+童子军规则随手修; 4)结果:积压可控,可维护性>7/10,零因债务导致事故",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_10",
+    "title": "如何做的性能基准测试？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "基准测试",
+      "pytest-benchmark",
+      "Locust",
+      "回归"
+    ],
+    "rubric": [
+      "能说明工具:pytest-benchmark+Locust+自建Dashboard",
+      "能说明执行:重大变更前后各一次+结果入库历史对比+回归阈值延迟增>10%告警"
+    ],
+    "answer_key_points": "核心要点：1)场景:单组件(向量/LLM/Rerank延迟)+端到端(简单/RAG/工具)+压力(最大QPS/并发); 2)工具:pytest-benchmark+Locust+自建Dashboard; 3)执行:重大变更前后各一次+结果入库历史对比+回归阈值延迟增>10%告警; 4)数据集:固定100条覆盖各类型; 5)结果:完整基线,检测出2次性能回归",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_11",
+    "title": "怎么做的配置管理？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "配置",
+      "Nacos",
+      "热更新",
+      "Secret",
+      "分层"
+    ],
+    "rubric": [
+      "能说明热更新:配置变更实时推送+审计日志+支持回滚",
+      "能说明环境:dev/staging/prod不同配置集+生产变更需审批"
+    ],
+    "answer_key_points": "核心要点：1)分层:静态(代码仓库)+动态(Nacos/Apollo配置中心watch推送)+敏感(Vault/K8s Secret); 2)热更新:配置变更实时推送+审计日志+支持回滚; 3)环境:dev/staging/prod不同配置集+生产变更需审批; 4)结果:Prompt更新不重启生效,变更<5s,零配置错误事故",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "quality_12",
+    "title": "团队协作和知识共享是怎么做的？",
+    "category": "工程质量",
+    "difficulty": "medium",
+    "tags": [
+      "团队协作",
+      "分享",
+      "结对",
+      "知识库",
+      "Review"
+    ],
+    "rubric": [
+      "能说明技术分享:每周30min轮流主讲(调研/踩坑/最佳实践)+沉淀文档",
+      "能说明结对:复杂功能(Prompt设计/安全模块)+新人On-boarding",
+      "能说明知识库:内部Wiki技术决策/排障/手册+FAQ更新"
+    ],
+    "answer_key_points": "核心要点：1)技术分享:每周30min轮流主讲(调研/踩坑/最佳实践)+沉淀文档; 2)结对:复杂功能(Prompt设计/安全模块)+新人On-boarding; 3)知识库:内部Wiki技术决策/排障/手册+FAQ更新; 4)Review文化:不只检查质量也是知识传递+鼓励解释why; 5)结果:知识孤岛消除,新人效率+60%",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_01",
+    "title": "你的系统解决了什么业务问题？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "业务问题",
+      "客服",
+      "效率",
+      "成本",
+      "满意度"
+    ],
+    "rubric": [
+      "能说明痛点:日2000+咨询70%重复+新客服培训3月+回答不一致+高峰排队10min",
+      "能说明方案:RAG智能问答自动常见+复杂转人工+7x24",
+      "能说明价值:AI处理65%+标准化回答+成本-40%+秒级响应"
+    ],
+    "answer_key_points": "核心要点：1)痛点:日2000+咨询70%重复+新客服培训3月+回答不一致+高峰排队10min; 2)方案:RAG智能问答自动常见+复杂转人工+7x24; 3)价值:AI处理65%+标准化回答+成本-40%+秒级响应; 4)结果:日均1300+自动处理,满意度72%→88%,人力-40%,响应5min→8s",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_02",
+    "title": "用户反馈怎么样？怎么收集和处理的？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "用户反馈",
+      "显式",
+      "隐式",
+      "闭环",
+      "优化"
+    ],
+    "rubric": [
+      "能说明显式:每回答后'有帮助/无帮助'+文字反馈",
+      "能说明处理:自动分类→不满意人工审核→根因(检索/生成/知识缺失)→优化→验证",
+      "能说明数据驱动:每周Top10不满意+跟踪改进指标"
+    ],
+    "answer_key_points": "核心要点：1)显式:每回答后'有帮助/无帮助'+文字反馈; 隐式:重复提问/转人工/轮次过多; 定期调研; 2)处理:自动分类→不满意人工审核→根因(检索/生成/知识缺失)→优化→验证; 3)数据驱动:每周Top10不满意+跟踪改进指标; 4)结果:显式收集率15%(行业5%),满意度82%→88%,处理周期3天",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_03",
+    "title": "你觉得 AI Agent 在企业中的价值是什么？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "商业价值",
+      "降本增效",
+      "知识民主化",
+      "ROI"
+    ],
+    "rubric": [
+      "能说明短期降本:重复工作自动化+典型ROI6月回本",
+      "能说明中期增强:知识民主化人人可查+决策辅助+服务标准化",
+      "能说明长期创新:智能工作流打通孤岛+个性化服务+自我进化"
+    ],
+    "answer_key_points": "核心要点：1)短期降本:重复工作自动化+典型ROI6月回本; 2)中期增强:知识民主化人人可查+决策辅助+服务标准化; 3)长期创新:智能工作流打通孤岛+个性化服务+自我进化; 4)关键:解决真实痛点(非炫技)+人机协作(非完全替代)+持续投入评估优化",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "biz_04",
+    "title": "和竞品相比你们的优势是什么？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "竞品",
+      "差异化",
+      "定制",
+      "私有化",
+      "多路检索"
+    ],
+    "rubric": [
+      "能说明优势:深度定制+三路检索融合准确率高+企业级工程(监控/安全/运维)+私有化部署+持续优化服务",
+      "能说明结果:POC竞标胜率70%(检索+私有化),续费率85%(持续优化)"
+    ],
+    "answer_key_points": "核心要点：1)竞品:通用平台(Coze/Dify)缺深度定制+大厂(百度阿里)不灵活需全家桶+开源(LangChain)缺生产运维; 2)优势:深度定制+三路检索融合准确率高+企业级工程(监控/安全/运维)+私有化部署+持续优化服务; 3)结果:POC竞标胜率70%(检索+私有化),续费率85%(持续优化)",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_05",
+    "title": "下一步的技术规划是什么？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "技术规划",
+      "路线图",
+      "Agentic",
+      "RAG",
+      "多模态"
+    ],
+    "rubric": [
+      "能说明短期1-3月:Agentic RAG(Agent自主决策检索策略)+多模态+RAGAS评估CI集成",
+      "能说明中期3-6月:多Agent协作(辩论/投票)+分层记忆重构(工作+情景+语义)+MCP生态",
+      "能说明长期6-12月:自我进化(历史优化Prompt/检索)+垂直小模型微调+可视化Agent编排"
+    ],
+    "answer_key_points": "核心要点：1)短期1-3月:Agentic RAG(Agent自主决策检索策略)+多模态+RAGAS评估CI集成; 2)中期3-6月:多Agent协作(辩论/投票)+分层记忆重构(工作+情景+语义)+MCP生态; 3)长期6-12月:自我进化(历史优化Prompt/检索)+垂直小模型微调+可视化Agent编排; 4)路线图季度review调整",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "biz_06",
+    "title": "你在项目中的角色是什么？最大的贡献是什么？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "角色",
+      "贡献",
+      "架构",
+      "核心模块",
+      "技术决策"
+    ],
+    "rubric": [
+      "能说明角色:后端技术负责人/AI工程师",
+      "能说明技术决策:推动单→多Agent演进"
+    ],
+    "answer_key_points": "核心要点：1)角色:后端技术负责人/AI工程师; 2)核心贡献:主导多路检索+Agent编排器设计+实现ReAct/检索管道/熔断器/模型路由+全链路延迟P50从6.5s→2.8s+建立CI/CD/监控/评估; 3)技术决策:推动单→多Agent演进; 4)成长:LangChain Demo→企业级AI Agent; 5)结果:20+客户,团队3→8人",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_07",
+    "title": "项目中遇到的最大挑战是什么？怎么解决的？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "挑战",
+      "满意度",
+      "检索不准",
+      "幻觉",
+      "数据驱动"
+    ],
+    "rubric": [
+      "能说明挑战:上线初满意度68%(目标80%)",
+      "能说明拆解200条:检索问题45%+幻觉30%+理解偏差15%+其他10%"
+    ],
+    "answer_key_points": "核心要点：1)挑战:上线初满意度68%(目标80%); 2)拆解200条:检索问题45%+幻觉30%+理解偏差15%+其他10%; 3)逐个击破:多路检索+reranker(+17%)+多层幻觉防控(18%→3%)+两阶段意图+置信度(94%); 4)方法论:数据驱动+逐个击破(非凭感觉); 5)结果:满意度68%→88%超目标",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "biz_08",
+    "title": "这个项目的 ROI 是怎么计算的？",
+    "category": "业务理解",
+    "difficulty": "easy",
+    "tags": [
+      "ROI",
+      "成本",
+      "收益",
+      "回本周期"
+    ],
+    "rubric": [
+      "能说明成本:研发(6人×6月)+基础设施(云+API月费)+运维(1人)",
+      "能说明收益:直接节省(AI替代40%客服)+效率提升(人工+30%)+收入(满意度→续费率)",
+      "能说明公式:ROI=(年收益-年成本)/年成本×100%"
+    ],
+    "answer_key_points": "核心要点：1)成本:研发(6人×6月)+基础设施(云+API月费)+运维(1人); 2)收益:直接节省(AI替代40%客服)+效率提升(人工+30%)+收入(满意度→续费率); 3)公式:ROI=(年收益-年成本)/年成本×100%; 4)结果:第7月回本,年化ROI~180%,说服管理层持续投入",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "basics_01",
+    "title": "Transformer 的 Self-Attention 怎么计算？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "Self-Attention",
+      "QKV",
+      "softmax",
+      "Multi-Head"
+    ],
+    "rubric": [
+      "能说明线性变换:Q=X·W_Q,K=X·W_K,V=X·W_V",
+      "能说明公式:Attention=softmax(QK^T/√d_k)·V",
+      "能说明√d_k防梯度消失,d_k=d_model/num_heads"
+    ],
+    "answer_key_points": "核心要点：1)线性变换:Q=X·W_Q,K=X·W_K,V=X·W_V; 2)公式:Attention=softmax(QK^T/√d_k)·V; 3)√d_k防梯度消失,d_k=d_model/num_heads; 4)Multi-Head:多Head并行关注不同语义子空间→Concat→W_O; 5)复杂度O(n²·d),长序列瓶颈; 6)优势:任意位置依赖(vs RNN顺序)+可并行",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_02",
+    "title": "LoRA 的原理是什么？为什么低秩有效？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "LoRA",
+      "低秩",
+      "微调",
+      "参数效率",
+      "QLoRA"
+    ],
+    "rubric": [
+      "能说明核心:不改W,加ΔW=B·A(B∈d×r,A∈r×d,r<<d)",
+      "能说明低秩有效:内在维度假说,微调参数变化存在低维子空间",
+      "能说明细节:A高斯初始化+B=0→训练初ΔW=0"
+    ],
+    "answer_key_points": "核心要点：1)核心:不改W,加ΔW=B·A(B∈d×r,A∈r×d,r<<d); d=4096,r=8时参数16M→65K(-99.6%); 2)低秩有效:内在维度假说,微调参数变化存在低维子空间; 3)细节:A高斯初始化+B=0→训练初ΔW=0; 只在Q/V投影; 推理合并零额外延迟; 4)对比:全量(显存大)>LoRA>Prompt Tuning>Adapter(有延迟); 5)QLoRA:4-bit+LoRA→消费级GPU微调",
+    "followups": [
+      "如果让你重新选择，还会做同样的决定吗？为什么？"
+    ]
+  },
+  {
+    "id": "basics_03",
+    "title": "RAG 和微调怎么选？各自优劣？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "RAG",
+      "微调",
+      "Fine-tuning",
+      "知识更新",
+      "选择"
+    ],
+    "rubric": [
+      "能说明RAG优:实时更新+可解释(引用)+无需GPU+减幻觉",
+      "能说明微调优:内化知识+改行为风格+无延迟+特定任务精度",
+      "能说明选择:频繁更新/需引用→RAG"
+    ],
+    "answer_key_points": "核心要点：1)RAG优:实时更新+可解释(引用)+无需GPU+减幻觉; 劣:受检索质量+context窗口+延迟增加+不改模型能力; 2)微调优:内化知识+改行为风格+无延迟+特定任务精度; 劣:更新重训+需标注数据+需GPU+灾难性遗忘; 3)选择:频繁更新/需引用→RAG; 领域风格/能力提升→微调; 最佳→两者结合; 4)实践:主体RAG+LoRA微调指令遵循风格",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_04",
+    "title": "KV Cache 是什么？为什么需要？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "KV",
+      "Cache",
+      "自回归",
+      "显存",
+      "推理加速"
+    ],
+    "rubric": [
+      "能说明问题:自回归生成第N+1 token需与前N个计算注意力,K/V重复计算",
+      "能说明原理:缓存每层K/V矩阵,新token只算新Q/K/V→与缓存K/V计算attention→追加",
+      "能说明复杂度:无cache O(n³)→有cache O(n²)"
+    ],
+    "answer_key_points": "核心要点：1)问题:自回归生成第N+1 token需与前N个计算注意力,K/V重复计算; 2)原理:缓存每层K/V矩阵,新token只算新Q/K/V→与缓存K/V计算attention→追加; 3)复杂度:无cache O(n³)→有cache O(n²); 4)代价:显存占用=2×层数×head×d×seq_len×精度; 5)优化:MQA/GQA(K/V共享head减少缓存)+PagedAttention(动态分配)",
+    "followups": [
+      "如果让你重新选择，还会做同样的决定吗？为什么？"
+    ]
+  },
+  {
+    "id": "basics_05",
+    "title": "RLHF 和 DPO 的区别？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "RLHF",
+      "DPO",
+      "PPO",
+      "对齐",
+      "偏好优化"
+    ],
+    "rubric": [
+      "能说明RLHF:训奖励模型RM→PPO优化策略(SFT模型)使RM打分高",
+      "能说明DPO:直接从偏好数据优化,跳过RM训练",
+      "能说明区别:RLHF需RM+PPO(复杂/不稳定/贵)+DPO直接优化(简单/稳定/高效)"
+    ],
+    "answer_key_points": "核心要点：1)RLHF:训奖励模型RM→PPO优化策略(SFT模型)使RM打分高; 三阶段:SFT→RM训练→PPO; 2)DPO:直接从偏好数据优化,跳过RM训练; 把RM最优解代入→变成分类损失直接优化; 3)区别:RLHF需RM+PPO(复杂/不稳定/贵)+DPO直接优化(简单/稳定/高效); 4)DPO局限:需高质量配对数据+泛化可能不如RLHF; 5)趋势:DPO及变体(IPO/KTO)更主流",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_06",
+    "title": "Embedding 模型是怎么训练的？对比学习怎么做的？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "Embedding",
+      "对比学习",
+      "正负例",
+      "InfoNCE"
+    ],
+    "rubric": [
+      "能说明目标:语义相近→向量相近,不相关→远离"
+    ],
+    "answer_key_points": "核心要点：1)目标:语义相近→向量相近,不相关→远离; 2)对比学习:正例(同文档/查询-文档)+负例(in-batch negatives+hard negatives); 3)损失:InfoNCE loss=-log(exp(sim(q,p+)/τ)/Σexp(sim(q,p_i)/τ)); 4)训练阶段:预训练(MLM)→对比学习(大规模弱监督)→微调(标注数据); 5)Hard Negatives:BM25 top-k但非正例的难负例提升效果",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_07",
+    "title": "向量数据库的索引原理是什么？HNSW 怎么工作的？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "HNSW",
+      "向量索引",
+      "近似最近邻",
+      "多层图"
+    ],
+    "rubric": [
+      "能说明HNSW=分层可导航小世界图",
+      "能说明构建:多层图,上层稀疏(长跳)+下层稠密(精确)",
+      "能说明查询:顶层粗定位→逐层下降→底层精确搜索"
+    ],
+    "answer_key_points": "核心要点：1)HNSW=分层可导航小世界图; 2)构建:多层图,上层稀疏(长跳)+下层稠密(精确); 插入时从顶层贪心搜索逐层向下+每层连接M个邻居; 3)查询:顶层粗定位→逐层下降→底层精确搜索; 4)参数:M(每节点连接数)越大越精确/越慢; efConstruction(建图搜索宽度); ef(查询搜索宽度); 5)对比:HNSW(内存大/延迟低)<100万; IVF(内存小/稍慢)>100万",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_08",
+    "title": "Prompt Engineering 有哪些关键技巧？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "Prompt",
+      "Engineering",
+      "CoT",
+      "Few-shot",
+      "技巧"
+    ],
+    "rubric": [
+      "能说明角色设定:明确AI身份和行为边界",
+      "能说明CoT(Chain-of-Thought):让模型分步推理",
+      "能说明Few-shot:提供2-3个高质量示例"
+    ],
+    "answer_key_points": "核心要点：1)角色设定:明确AI身份和行为边界; 2)CoT(Chain-of-Thought):让模型分步推理; 3)Few-shot:提供2-3个高质量示例; 4)格式约束:明确输出格式(JSON/Markdown)+分隔符; 5)迭代优化:A/B测试+定量评估; 6)进阶:Self-Consistency(多次生成投票)+ReAct(推理+行动)+Tree-of-Thought(多路径探索)",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_09",
+    "title": "大模型的 Context Window 限制怎么突破？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "Context",
+      "Window",
+      "长文本",
+      "Map-Reduce",
+      "RAG"
+    ],
+    "rubric": [
+      "能说明分块处理:Map-Reduce(各chunk独立处理→综合)+Refine(迭代精化)",
+      "能说明RAG:只检索相关top-k chunk放入context",
+      "能说明摘要压缩:长对话定期摘要"
+    ],
+    "answer_key_points": "核心要点：1)分块处理:Map-Reduce(各chunk独立处理→综合)+Refine(迭代精化); 2)RAG:只检索相关top-k chunk放入context; 3)摘要压缩:长对话定期摘要; 4)模型层面:RoPE频率外推/内插(如YaRN)+稀疏注意力(Longformer)+滑动窗口; 5)实践:结合RAG(实时)+摘要(历史)最实用",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_10",
+    "title": "LLM 的解码策略有哪些？Temperature 和 Top-p 怎么影响输出？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "解码",
+      "Temperature",
+      "Top-p",
+      "采样",
+      "贪心"
+    ],
+    "rubric": [
+      "能说明贪心:每步选概率最高(确定性最强)",
+      "能说明Temperature:logits/T后softmax",
+      "能说明Top-p(nucleus):只从累计概率≥p的token集合采样"
+    ],
+    "answer_key_points": "核心要点：1)贪心:每步选概率最高(确定性最强); 2)Temperature:logits/T后softmax; T↓→分布尖锐(确定)+T↑→分布平坦(多样); 3)Top-p(nucleus):只从累计概率≥p的token集合采样; p=0.9过滤长尾噪声; 4)Top-k:只从概率最高的k个中采样; 5)实践:事实类T=0;创意T=0.7~1.0+top_p=0.9; 代码T=0~0.2",
+    "followups": [
+      "能举一个具体的案例或场景来说明吗？"
+    ]
+  },
+  {
+    "id": "basics_11",
+    "title": "什么是 Agent 的工具学习（Tool Learning）？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "Tool",
+      "Learning",
+      "工具",
+      "Function",
+      "Calling"
+    ],
+    "rubric": [
+      "能说明定义:LLM学会何时调工具+选哪个+传什么参数+解读结果",
+      "能说明训练:工具使用数据微调(Gorilla/ToolBench)+强化学习"
+    ],
+    "answer_key_points": "核心要点：1)定义:LLM学会何时调工具+选哪个+传什么参数+解读结果; 2)实现:Function Calling(工具Schema描述→模型选择)+ReAct(推理后决定行动); 3)训练:工具使用数据微调(Gorilla/ToolBench)+强化学习; 4)挑战:工具数多选择难+参数构造复杂+多步编排+错误恢复; 5)趋势:MCP标准化+工具自发现+Agent自主学习新工具",
+    "followups": [
+      "具体的量化结果是什么？有没有对比数据？"
+    ]
+  },
+  {
+    "id": "basics_12",
+    "title": "什么是 Mixture of Experts（MoE）？为什么重要？",
+    "category": "基础知识追问",
+    "difficulty": "medium",
+    "tags": [
+      "MoE",
+      "混合专家",
+      "Router",
+      "稀疏激活"
+    ],
+    "rubric": [
+      "能说明核心:多个专家网络+Router门控选择",
+      "能说明优势:参数量大(容量大)但计算量小(稀疏激活)",
+      "能说明Router:学习的门控网络softmax选top-k+负载均衡loss"
+    ],
+    "answer_key_points": "核心要点：1)核心:多个专家网络+Router门控选择; 每次只激活top-k个专家(如8选2); 2)优势:参数量大(容量大)但计算量小(稀疏激活); 3)Router:学习的门控网络softmax选top-k+负载均衡loss; 4)代表:Mixtral8x7B(总56B参数,激活13B,效果≈70B密集); GPT-4据传MoE; 5)挑战:训练不稳定+专家坍塌+通信开销(分布式)",
+    "followups": [
+      "如果让你重新选择，还会做同样的决定吗？为什么？"
+    ]
+  }
+]

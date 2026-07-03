@@ -1,0 +1,18 @@
+姓名：王嘉怡
+学校：中国科学技术大学 计算机技术 硕士在读
+
+【项目经历】
+1. 垂直领域 LLM 微调与部署（2025.06 - 2025.12）
+- 基于 QLoRA 对 Qwen-14B 进行医疗领域微调，训练数据 10 万条 SFT 样本
+- 设计 Prompt Engineering 模板体系：few-shot + CoT + 结构化输出约束
+- 使用 vLLM 部署推理服务，batch inference 吞吐量达 200 tokens/s
+- 对比实验：微调后领域任务 BLEU 提升 12%，幻觉率下降 23%
+
+2. Prompt 自动优化工具（2026.01 - 2026.05）
+- 实现 DSPy 风格的 Prompt 自动搜索框架，支持指令变异 + 自动评估
+- 设计 A/B 测试流水线：自动生成 prompt 变体 → 批量测试 → 统计显著性检验
+- 集成 RLHF 偏好数据收集模块，支持标注员对输出质量排序
+- 工具上线后，业务 prompt 迭代周期从 3 天缩短至 4 小时
+
+【技术栈】
+Python / PyTorch / HuggingFace PEFT / vLLM / DeepSpeed / Prompt Engineering / Weights & Biases

@@ -1,0 +1,18 @@
+姓名：许晓萌
+学校：南京大学 多媒体计算方向 硕士在读
+
+【项目经历】
+1. 多模态图文检索系统（2025.02 - 2025.08）
+- 基于 CLIP 模型实现跨模态检索，支持文本搜图片、图片搜文本
+- 在 Flickr30K 上 Recall@1 达到 87.3%，通过 hard negative mining 提升 6%
+- 设计多模态融合模块：early fusion + late fusion 对比实验
+- 部署 ONNX Runtime 推理加速，单次检索延迟 < 50ms（100 万图库规模）
+
+2. 多模态 Agent 助手（2025.09 - 2026.04）
+- 构建能处理图文混合输入的 Agent，支持图片理解 + 文本推理 + 工具调用
+- 集成 GPT-4V 进行图像分析，结合 ReAct 框架实现多步推理
+- 实现工具链：OCR 提取 → 表格解析 → 数据查询 → 图表生成
+- 在内部测试集上，多模态任务完成率 82%，优于纯文本 Agent 61%
+
+【技术栈】
+Python / PyTorch / CLIP / BLIP-2 / OpenAI Vision API / LangChain / ONNX / Gradio

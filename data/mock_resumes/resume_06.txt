@@ -1,0 +1,24 @@
+姓名：赵梦瑶
+学校：复旦大学 自然语言处理方向 博士在读（三年级）
+
+【论文发表】
+- ACL 2025 主会：《Adaptive Attention Routing for Multi-task Language Models》一作
+- EMNLP 2024 Findings：《Cross-lingual Transfer via Shared Subword Representations》二作
+- AAAI 2025：《Efficient Transformer Pruning with Gradient-based Saliency》三作
+
+【科研经历】
+1. 多任务自适应注意力机制（ACL 2025 工作）
+- 提出动态注意力路由方法，不同任务自动分配 attention head
+- 在 GLUE 和 SuperGLUE 上平均提升 2.3%，参数量减少 15%
+- 实验涉及 A100 集群训练，熟悉分布式训练（DeepSpeed ZeRO-3）
+
+2. 低资源跨语言迁移学习
+- 研究 Transformer 中间层表征对齐方法，覆盖 8 种低资源语言
+- 在 XTREME 基准上 zero-shot 性能提升 5.1%
+
+【工程经验】
+- 熟悉 PyTorch、HuggingFace Transformers 模型训练全流程
+- 有基础的 Flask API 开发经验，无大型工程项目经历
+
+【技术栈】
+Python / PyTorch / HuggingFace / DeepSpeed / CUDA / LaTeX / Linux

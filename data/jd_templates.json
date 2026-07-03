@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ai_agent_intern",
+    "title": "AI Agent 实习生",
+    "company": "某 AI 创业公司",
+    "description": "负责 AI Agent 系统的开发与优化，参与智能体编排、工具调用、对话管理等核心模块开发。",
+    "requirements": [
+      "熟悉 Python，有实际项目经验",
+      "了解 LLM 应用开发（RAG、Function Calling、Prompt Engineering）",
+      "了解 Agent 架构（ReAct、Plan-and-Execute、多Agent协作）",
+      "熟悉向量数据库（Milvus/Qdrant/FAISS）",
+      "了解 FastAPI 或类似 Web 框架",
+      "加分：有 MCP 协议、LangChain/LlamaIndex 经验"
+    ],
+    "focus_keywords": ["Agent", "ReAct", "Function Calling", "工具调用", "编排", "MCP", "多Agent", "状态机"]
+  },
+  {
+    "id": "rag_engineer",
+    "title": "RAG 工程师",
+    "company": "某企业级 AI 产品公司",
+    "description": "负责检索增强生成系统的设计与优化，包括文档处理、检索管道、重排序、知识库管理等。",
+    "requirements": [
+      "熟悉 RAG 架构和检索管道设计",
+      "有向量数据库实际使用经验（Milvus/FAISS/Qdrant）",
+      "了解 BM25、向量检索、混合检索、重排序",
+      "了解文档处理（分块策略、格式解析）",
+      "熟悉 Embedding 模型选型和评估",
+      "加分：有 Agentic RAG、知识图谱经验"
+    ],
+    "focus_keywords": ["RAG", "检索", "向量", "BM25", "Rerank", "分块", "Embedding", "知识库", "Milvus"]
+  },
+  {
+    "id": "llm_app_dev",
+    "title": "LLM 应用开发工程师",
+    "company": "某大厂 AI 平台部门",
+    "description": "负责大模型应用的开发与产品化，包括 Prompt 工程、模型路由、流式输出、评估体系等。",
+    "requirements": [
+      "熟悉主流 LLM API（OpenAI/Anthropic/国产模型）",
+      "掌握 Prompt Engineering 技巧",
+      "了解模型微调（LoRA/QLoRA）",
+      "有流式输出、模型路由等工程化经验",
+      "了解 LLM 评估方法",
+      "加分：有模型部署（vLLM/TGI）、成本优化经验"
+    ],
+    "focus_keywords": ["LLM", "Prompt", "微调", "LoRA", "流式", "模型路由", "评估", "Token", "幻觉"]
+  }
+]

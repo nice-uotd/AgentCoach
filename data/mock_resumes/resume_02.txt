@@ -1,0 +1,18 @@
+姓名：林子墨
+学校：上海交通大学 人工智能 硕士在读
+
+【项目经历】
+1. 多工具协作 AI Agent 平台（2025.05 - 2025.11）
+- 基于 ReAct 框架设计 Agent 推理链路，支持思考-行动-观察循环决策
+- 实现 Function Calling 机制，注册 20+ 外部工具（搜索、计算、代码执行、API 调用）
+- 设计工具路由模块，通过意图分类将用户请求分发至对应工具链，准确率 94%
+- 构建 Agent 记忆模块（短期 buffer + 长期向量存储），支持跨会话上下文保持
+
+2. 多 Agent 协作编排系统（2025.12 - 2026.04）
+- 基于 LangGraph 实现多 Agent DAG 编排，支持串行/并行/条件分支执行
+- 设计 Supervisor Agent 进行任务分解与子 Agent 调度，复杂任务完成率提升 35%
+- 实现 Agent 间消息传递协议与错误恢复机制，系统可用性达 99.2%
+- 支持人机协作模式：Human-in-the-loop 审批节点 + 自动回退策略
+
+【技术栈】
+Python / LangChain / LangGraph / OpenAI API / Function Calling / AsyncIO / Docker
